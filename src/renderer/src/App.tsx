@@ -1,6 +1,5 @@
 import Versions from './components/Versions'
 import electronLogo from './assets/electron.svg'
-import './assets/main.css'
 
 function App(): JSX.Element {
   const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
@@ -36,7 +35,7 @@ function App(): JSX.Element {
           marginTop: '20px' // Added margin-top to add distance from the previous element
         }}
       >
-        <h1 className="text-3xl italic">Hello Tailwind!</h1>
+        <h1 className="text-2xl italic text-gray-500">Hello Tailwind!</h1>
       </div>
       <Versions></Versions>
     </>

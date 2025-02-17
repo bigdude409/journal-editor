@@ -35,7 +35,7 @@ function App(): JSX.Element {
           marginTop: '20px' // Added margin-top to add distance from the previous element
         }}
       >
-        <h1 className="text-2xl italic text-gray-500">Hello Tailwind!</h1>
+        <h1 className="text-xl text-blue-400">Hello Tailwind!</h1>
       </div>
       <Versions></Versions>
     </>

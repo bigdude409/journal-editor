@@ -5,11 +5,13 @@ import { useState } from 'react'
 function App(): JSX.Element {
   const [selectedImage, setSelectedImage] = useState<string>('/media/DSC_0374.JPG')
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const file = event.target.files?.[0]
-    if (file) {
-      // const imageUrl = URL.createObjectURL(file)
-      setSelectedImage(`/media/${file.name}`)
+  const handleFileSelect = async (): Promise<void> => {
+    const filePath = await window.electron.ipcRenderer.invoke(
+      'select-file',
+      '~/Projects/photo-journal-editor/public/media'
+    )
+    if (filePath) {
+      setSelectedImage(`/media/${filePath.split('/').pop()}`)
     }
   }
 
@@ -27,7 +29,7 @@ function App(): JSX.Element {
 
       <div style={{ textAlign: 'center' }}>
         <label
-          htmlFor="file-upload"
+          onClick={handleFileSelect}
           style={{
             display: 'inline-block',
             marginBottom: '1rem',
@@ -41,15 +43,6 @@ function App(): JSX.Element {
         >
           Select Image
         </label>
-        <input
-          id="file-upload"
-          type="file"
-          accept="image/*"
-          onChange={handleFileSelect}
-          style={{
-            display: 'none'
-          }}
-        />
       </div>
 
       <Versions></Versions>

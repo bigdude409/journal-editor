@@ -1,5 +1,5 @@
 import Versions from './components/Versions'
-// import electronLogo from './assets/electron.svg'
+import ImageEditor from './components/ImageEditor'
 
 function App(): JSX.Element {
   const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
@@ -14,6 +14,8 @@ function App(): JSX.Element {
           Ping!
         </a>
       </div>
+      <img src="/dog.jpeg" />
+      <ImageEditor />
       <Versions></Versions>
     </>
   )

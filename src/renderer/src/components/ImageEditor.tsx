@@ -248,7 +248,7 @@ function ImageEditor({ initialFactor, src, width, height }: ImageEditorProps): J
               border: 'none',
               background: 'none',
               cursor: 'pointer',
-              padding: '4px',
+              padding: '0px',
               display: 'flex'
             }}
           >

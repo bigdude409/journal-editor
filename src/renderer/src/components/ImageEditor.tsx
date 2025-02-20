@@ -1,8 +1,10 @@
 /// <reference types="@webgpu/types" />
 
-import React, { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState } from 'react'
 
-const ImageEditor: React.FC = () => {
+const initialGrayscaleFactor = 0.5
+
+function ImageEditor(): JSX.Element {
   // References for canvas and WebGPU objects
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const webgpuRef = useRef<{
@@ -17,7 +19,7 @@ const ImageEditor: React.FC = () => {
   const renderRef = useRef<(() => void) | null>(null)
 
   // State for grayscale factor controlled by the slider
-  const [grayscaleFactor, setGrayscaleFactor] = useState(0.5)
+  const [grayscaleFactor, setGrayscaleFactor] = useState(initialGrayscaleFactor)
 
   // Initialize WebGPU and set up rendering
   useEffect(() => {
@@ -130,6 +132,7 @@ const ImageEditor: React.FC = () => {
         usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
       })
       webgpuRef.current.uniformBuffer = uniformBuffer
+      device.queue.writeBuffer(uniformBuffer, 0, new Float32Array([initialGrayscaleFactor]))
 
       // Create sampler
       const sampler = device.createSampler({
@@ -169,7 +172,7 @@ const ImageEditor: React.FC = () => {
         device.queue.submit([commandEncoder.finish()])
       }
 
-      device.queue.writeBuffer(uniformBuffer, 0, new Float32Array([grayscaleFactor]))
+      // device.queue.writeBuffer(uniformBuffer, 0, new Float32Array([grayscaleFactor]))
       // Store render function and perform initial render
       renderRef.current = render
       render()

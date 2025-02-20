@@ -169,6 +169,7 @@ const ImageEditor: React.FC = () => {
         device.queue.submit([commandEncoder.finish()])
       }
 
+      device.queue.writeBuffer(uniformBuffer, 0, new Float32Array([grayscaleFactor]))
       // Store render function and perform initial render
       renderRef.current = render
       render()

@@ -226,11 +226,29 @@ function ImageEditor({ initialFactor, src, width, height }: ImageEditorProps): J
             flexDirection: 'row',
             alignItems: 'center',
             gap: '10px',
-            width: '80%'
+            width: '40%'
           }}
         >
-          <div>-</div>
+          <div style={{ fontSize: '20px', marginLeft: '20px', fontWeight: 'bold' }}>-</div>
 
+          <style>
+            {`
+              input[type="range"] {
+                height: 15px;
+                -webkit-appearance: none;
+                background: #4a4a4a;
+                border-radius: 5px;
+              }
+              input[type="range"]::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                width: 25px;
+                height: 15px;
+                border-radius: 5px;
+                background: #0d80fb;
+                cursor: pointer;
+              }
+            `}
+          </style>
           <input
             type="range"
             min="-1"
@@ -238,9 +256,9 @@ function ImageEditor({ initialFactor, src, width, height }: ImageEditorProps): J
             step="0.01"
             value={grayscaleFactor}
             onChange={(e) => setGrayscaleFactor(parseFloat(e.target.value))}
-            style={{ width: '100%', padding: '10px 0px' }}
+            style={{ width: '100%', marginTop: '3px', padding: '0px 0px' }}
           />
-          <div>+</div>
+          <div style={{ fontSize: '20px', fontWeight: 'bold' }}>+</div>
 
           <button
             onClick={() => setGrayscaleFactor(0)}
@@ -248,7 +266,8 @@ function ImageEditor({ initialFactor, src, width, height }: ImageEditorProps): J
               border: 'none',
               background: 'none',
               cursor: 'pointer',
-              padding: '0px',
+              padding: '0px 0px',
+              marginTop: '2px',
               display: 'flex'
             }}
           >
@@ -258,7 +277,7 @@ function ImageEditor({ initialFactor, src, width, height }: ImageEditorProps): J
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="1"
               strokeLinecap="round"
               strokeLinejoin="round"
             >

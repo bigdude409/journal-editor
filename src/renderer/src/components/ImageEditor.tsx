@@ -233,6 +233,7 @@ function ImageEditor({
           }}
         >
           <div>-</div>
+
           <input
             type="range"
             min="-1"
@@ -240,9 +241,34 @@ function ImageEditor({
             step="0.01"
             value={grayscaleFactor}
             onChange={(e) => setGrayscaleFactor(parseFloat(e.target.value))}
-            style={{ width: '100%', padding: '10px 0' }}
+            style={{ width: '100%', padding: '10px 0px' }}
           />
           <div>+</div>
+
+          <button
+            onClick={() => setGrayscaleFactor(0)}
+            style={{
+              border: 'none',
+              background: 'none',
+              cursor: 'pointer',
+              padding: '4px',
+              display: 'flex'
+            }}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+              <path d="M3 3v5h5" />
+            </svg>
+          </button>
         </div>
       </div>
     </div>

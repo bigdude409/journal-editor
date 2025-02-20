@@ -18,9 +18,8 @@ function App(): JSX.Element {
   return (
     <>
       <div className="text">
-        <span className="ts">WebGPU Saturation Adjustment</span>
+        <span className="ts">Saturation Adjustment (WebGPU)</span>
       </div>
-      <div className="title">{selectedImage}</div>
 
       <div className="image-container">
         <img src={selectedImage} style={{ borderRadius: '5px', width: '800px', height: '800px' }} />
@@ -43,6 +42,9 @@ function App(): JSX.Element {
         >
           Select Image
         </label>
+        <span className="title" style={{ marginLeft: '10px' }}>
+          {selectedImage}
+        </span>
       </div>
 
       <Versions></Versions>

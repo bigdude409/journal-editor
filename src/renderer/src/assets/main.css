@@ -82,7 +82,8 @@ code {
 }
 
 .ts {
-  background: -webkit-linear-gradient(315deg, #3178c6 45%, #f0dc4e);
+  /* background: -webkit-linear-gradient(315deg, #3178c6 45%, #f0dc4e); */
+  background: #0d80fb;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

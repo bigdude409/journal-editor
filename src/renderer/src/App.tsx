@@ -24,7 +24,7 @@ function App(): JSX.Element {
 
       <div className="image-container">
         <img src={selectedImage} style={{ borderRadius: '5px', width: '400px', height: '400px' }} />
-        <ImageEditor grayscaleFactor={0.0} src={selectedImage} width={400} height={400} />
+        <ImageEditor initialFactor={0.0} src={selectedImage} width={400} height={400} />
       </div>
 
       <div style={{ textAlign: 'center' }}>

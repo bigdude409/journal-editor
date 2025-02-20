@@ -3,20 +3,13 @@
 import { useRef, useEffect, useState } from 'react'
 
 interface ImageEditorProps {
-  grayscaleFactor?: number
+  initialFactor: number
   src: string
   width: number
   height: number
 }
 
-const initialGrayscaleFactor = 0.0
-
-function ImageEditor({
-  grayscaleFactor: initialFactor = initialGrayscaleFactor,
-  src,
-  width,
-  height
-}: ImageEditorProps): JSX.Element {
+function ImageEditor({ initialFactor, src, width, height }: ImageEditorProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const webgpuRef = useRef<{
     device: GPUDevice | null
@@ -31,6 +24,10 @@ function ImageEditor({
   const [grayscaleFactor, setGrayscaleFactor] = useState(initialFactor)
   const [canvasWidth] = useState(width)
   const [canvasHeight] = useState(height)
+
+  useEffect(() => {
+    setGrayscaleFactor(initialFactor)
+  }, [src, initialFactor])
 
   useEffect(() => {
     async function initWebGPU(): Promise<void> {

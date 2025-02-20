@@ -6,10 +6,14 @@ const initialGrayscaleFactor = 0.5
 
 function ImageEditor({
   grayscaleFactor: initialFactor = initialGrayscaleFactor,
-  src
+  src,
+  width,
+  height
 }: {
   grayscaleFactor?: number
   src: string
+  width: number
+  height: number
 }): JSX.Element {
   // References for canvas and WebGPU objects
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -28,8 +32,8 @@ function ImageEditor({
   const [grayscaleFactor, setGrayscaleFactor] = useState(initialFactor)
 
   // State for canvas dimensions
-  const [canvasWidth, setCanvasWidth] = useState(250)
-  const [canvasHeight, setCanvasHeight] = useState(250)
+  const [canvasWidth] = useState(width)
+  const [canvasHeight] = useState(height)
 
   // Initialize WebGPU and set up rendering
   useEffect(() => {

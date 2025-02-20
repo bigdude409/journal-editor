@@ -209,7 +209,7 @@ function ImageEditor({
   useEffect(() => {
     const { device, uniformBuffer } = webgpuRef.current
     if (device && uniformBuffer && renderRef.current) {
-      device.queue.writeBuffer(uniformBuffer, 0, new Float32Array([grayscaleFactor]))
+      device.queue.writeBuffer(uniformBuffer, 0, new Float32Array([-1.0 * grayscaleFactor]))
       renderRef.current()
     }
   }, [grayscaleFactor])

@@ -15,7 +15,7 @@ function App(): JSX.Element {
         </a>
       </div>
       <img src="/dog.jpeg" />
-      <ImageEditor />
+      <ImageEditor grayscaleFactor={0.5} src="/dog.jpeg" />
       <Versions></Versions>
     </>
   )

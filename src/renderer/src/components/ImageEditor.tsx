@@ -4,7 +4,13 @@ import { useRef, useEffect, useState } from 'react'
 
 const initialGrayscaleFactor = 0.5
 
-function ImageEditor(): JSX.Element {
+function ImageEditor({
+  grayscaleFactor: initialFactor = initialGrayscaleFactor,
+  src
+}: {
+  grayscaleFactor?: number
+  src: string
+}): JSX.Element {
   // References for canvas and WebGPU objects
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const webgpuRef = useRef<{
@@ -19,7 +25,7 @@ function ImageEditor(): JSX.Element {
   const renderRef = useRef<(() => void) | null>(null)
 
   // State for grayscale factor controlled by the slider
-  const [grayscaleFactor, setGrayscaleFactor] = useState(initialGrayscaleFactor)
+  const [grayscaleFactor, setGrayscaleFactor] = useState(initialFactor)
 
   // Initialize WebGPU and set up rendering
   useEffect(() => {
@@ -50,7 +56,7 @@ function ImageEditor(): JSX.Element {
 
       // Load image and create texture
       const img = new Image()
-      img.src = '/dog.jpeg' // Replace with your image path
+      img.src = src // Use provided image path
       await new Promise((resolve) => (img.onload = resolve))
       const bitmap = await createImageBitmap(img)
       canvas.width = bitmap.width
@@ -132,7 +138,7 @@ function ImageEditor(): JSX.Element {
         usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
       })
       webgpuRef.current.uniformBuffer = uniformBuffer
-      device.queue.writeBuffer(uniformBuffer, 0, new Float32Array([initialGrayscaleFactor]))
+      device.queue.writeBuffer(uniformBuffer, 0, new Float32Array([initialFactor]))
 
       // Create sampler
       const sampler = device.createSampler({
@@ -172,14 +178,13 @@ function ImageEditor(): JSX.Element {
         device.queue.submit([commandEncoder.finish()])
       }
 
-      // device.queue.writeBuffer(uniformBuffer, 0, new Float32Array([grayscaleFactor]))
       // Store render function and perform initial render
       renderRef.current = render
       render()
     }
 
     initWebGPU()
-  }, []) // Runs once on mount
+  }, [src]) // Re-run when src changes
 
   // Update uniform buffer and re-render on grayscaleFactor change
   useEffect(() => {

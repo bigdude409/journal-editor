@@ -1,3 +1,5 @@
+/// <reference types="@webgpu/types" />
+
 import React, { useRef, useEffect, useState } from 'react'
 
 const ImageEditor: React.FC = () => {
@@ -55,7 +57,10 @@ const ImageEditor: React.FC = () => {
       const texture = device.createTexture({
         size: { width: bitmap.width, height: bitmap.height, depthOrArrayLayers: 1 },
         format: 'rgba8unorm',
-        usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT
+        usage:
+          GPUTextureUsage.TEXTURE_BINDING |
+          GPUTextureUsage.COPY_DST |
+          GPUTextureUsage.RENDER_ATTACHMENT
       })
       device.queue.copyExternalImageToTexture(
         { source: bitmap },

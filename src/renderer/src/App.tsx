@@ -27,7 +27,7 @@ function App(): JSX.Element {
         <ImageEditor initialFactor={0.0} src={selectedImage} width={800} height={800} />
       </div>
 
-      <div style={{ textAlign: 'center' }}>
+      <div style={{ textAlign: 'center', padding: '10px 0px' }}>
         <label
           onClick={handleFileSelect}
           style={{
@@ -37,7 +37,7 @@ function App(): JSX.Element {
             backgroundColor: '#2c2c2c',
             border: 'none',
             borderRadius: '20px',
-            color: '#888',
+            color: '#fff',
             cursor: 'pointer'
           }}
         >

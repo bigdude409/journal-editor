@@ -2,20 +2,18 @@ import Versions from './components/Versions'
 import ImageEditor from './components/ImageEditor'
 
 function App(): JSX.Element {
-  const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
+  // const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
 
   return (
     <>
       <div className="text">
-        <span className="ts">And now it begins...</span>
+        <span className="ts">WebGPU</span>
       </div>
-      <div className="action">
-        <a target="_blank" rel="noreferrer" onClick={ipcHandle}>
-          Ping!
-        </a>
+      <div className="title">Grayscale Adjustment</div>
+      <div className="image-container">
+        <img src="/dog.jpeg" style={{ borderRadius: '5px' }} />
+        <ImageEditor grayscaleFactor={0.5} src="/dog.jpeg" />
       </div>
-      <img src="/dog.jpeg" />
-      <ImageEditor grayscaleFactor={0.5} src="/dog.jpeg" />
       <Versions></Versions>
     </>
   )

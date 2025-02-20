@@ -1,5 +1,5 @@
 @import './base.css';
-@import "tailwindcss";
+@import 'tailwindcss';
 
 body {
   display: flex;
@@ -123,6 +123,17 @@ code {
   border-color: var(--ev-button-alt-hover-border);
   color: var(--ev-button-alt-hover-text);
   background-color: var(--ev-button-alt-hover-bg);
+}
+
+.image-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0px;
+  font-family: 'Menlo', 'Lucida Console', monospace;
+  border-radius: 10px;
+  background-color: #202127;
+  backdrop-filter: blur(24px);
 }
 
 .versions {

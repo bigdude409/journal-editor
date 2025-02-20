@@ -184,7 +184,7 @@ function ImageEditor({
     }
 
     initWebGPU()
-  }, [src]) // Re-run when src changes
+  }, [src, initialFactor]) // Re-run when src changes
 
   // Update uniform buffer and re-render on grayscaleFactor change
   useEffect(() => {
@@ -199,7 +199,7 @@ function ImageEditor({
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <canvas ref={canvasRef} />
+        <canvas ref={canvasRef} style={{ borderRadius: '5px' }} />
         <input
           type="range"
           min="0"
@@ -207,6 +207,7 @@ function ImageEditor({
           step="0.01"
           value={grayscaleFactor}
           onChange={(e) => setGrayscaleFactor(parseFloat(e.target.value))}
+          style={{ width: '100%', padding: '10px 0' }}
         />
       </div>
     </div>

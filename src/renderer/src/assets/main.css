@@ -127,7 +127,7 @@ code {
 
 .image-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 20px;
   padding: 0px;
   font-family: 'Menlo', 'Lucida Console', monospace;

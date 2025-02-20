@@ -23,8 +23,8 @@ function App(): JSX.Element {
       <div className="title">{selectedImage}</div>
 
       <div className="image-container">
-        <img src={selectedImage} style={{ borderRadius: '5px', width: '400px', height: '400px' }} />
-        <ImageEditor initialFactor={0.0} src={selectedImage} width={400} height={400} />
+        <img src={selectedImage} style={{ borderRadius: '5px', width: '800px', height: '800px' }} />
+        <ImageEditor initialFactor={0.0} src={selectedImage} width={800} height={800} />
       </div>
 
       <div style={{ textAlign: 'center' }}>

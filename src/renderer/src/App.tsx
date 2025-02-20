@@ -11,8 +11,8 @@ function App(): JSX.Element {
       </div>
       <div className="title">Grayscale Adjustment</div>
       <div className="image-container">
-        <img src="/dog.jpeg" style={{ borderRadius: '5px' }} />
-        <ImageEditor grayscaleFactor={0.5} src="/dog.jpeg" />
+        <img src="/DSC_0374.JPG" style={{ borderRadius: '5px', width: '250px', height: '250px' }} />
+        <ImageEditor grayscaleFactor={0.5} src="/DSC_0374.JPG" />
       </div>
       <Versions></Versions>
     </>

@@ -27,6 +27,10 @@ function ImageEditor({
   // State for grayscale factor controlled by the slider
   const [grayscaleFactor, setGrayscaleFactor] = useState(initialFactor)
 
+  // State for canvas dimensions
+  const [canvasWidth, setCanvasWidth] = useState(250)
+  const [canvasHeight, setCanvasHeight] = useState(250)
+
   // Initialize WebGPU and set up rendering
   useEffect(() => {
     async function initWebGPU(): Promise<void> {
@@ -59,11 +63,14 @@ function ImageEditor({
       img.src = src // Use provided image path
       await new Promise((resolve) => (img.onload = resolve))
       const bitmap = await createImageBitmap(img)
-      canvas.width = bitmap.width
-      canvas.height = bitmap.height
+
+      // Calculate scaled dimensions to fit within canvas
+      const scaleFactor = Math.min(canvasWidth / bitmap.width, canvasHeight / bitmap.height)
+      const scaledWidth = Math.floor(bitmap.width * scaleFactor)
+      const scaledHeight = Math.floor(bitmap.height * scaleFactor)
 
       const texture = device.createTexture({
-        size: { width: bitmap.width, height: bitmap.height, depthOrArrayLayers: 1 },
+        size: { width: scaledWidth, height: scaledHeight, depthOrArrayLayers: 1 },
         format: 'rgba8unorm',
         usage:
           GPUTextureUsage.TEXTURE_BINDING |
@@ -73,7 +80,7 @@ function ImageEditor({
       device.queue.copyExternalImageToTexture(
         { source: bitmap },
         { texture },
-        { width: bitmap.width, height: bitmap.height }
+        { width: scaledWidth, height: scaledHeight }
       )
 
       // Define shaders in WGSL
@@ -184,7 +191,7 @@ function ImageEditor({
     }
 
     initWebGPU()
-  }, [src, initialFactor]) // Re-run when src changes
+  }, [src, initialFactor, canvasWidth, canvasHeight]) // Re-run when src or canvas dimensions change
 
   // Update uniform buffer and re-render on grayscaleFactor change
   useEffect(() => {
@@ -199,7 +206,12 @@ function ImageEditor({
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <canvas ref={canvasRef} style={{ borderRadius: '5px' }} />
+        <canvas
+          ref={canvasRef}
+          width={canvasWidth}
+          height={canvasHeight}
+          style={{ borderRadius: '5px' }}
+        />
         <input
           type="range"
           min="0"

@@ -9,7 +9,7 @@ interface ImageEditorProps {
   height: number
 }
 
-const initialGrayscaleFactor = 0.5
+const initialGrayscaleFactor = 0.0
 
 function ImageEditor({
   grayscaleFactor: initialFactor = initialGrayscaleFactor,
@@ -94,8 +94,8 @@ function ImageEditor({
       )
 
       // Calculate ratios for vertex positioning (NDC: -1 to 1)
-      const widthRatio = (scaledWidth / canvasWidth) * 1
-      const heightRatio = (scaledHeight / canvasHeight) * -1
+      const widthRatio = (scaledWidth / canvasWidth) * 1.0
+      const heightRatio = (scaledHeight / canvasHeight) * -1.0
 
       // Define shaders
       const shaderCode = `
@@ -225,7 +225,7 @@ function ImageEditor({
         />
         <input
           type="range"
-          min="0"
+          min="-1"
           max="1"
           step="0.01"
           value={grayscaleFactor}

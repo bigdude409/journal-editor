@@ -223,15 +223,27 @@ function ImageEditor({
           height={canvasHeight}
           style={{ borderRadius: '5px' }}
         />
-        <input
-          type="range"
-          min="-1"
-          max="1"
-          step="0.01"
-          value={grayscaleFactor}
-          onChange={(e) => setGrayscaleFactor(parseFloat(e.target.value))}
-          style={{ width: '100%', padding: '10px 0' }}
-        />
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: '10px',
+            width: '80%'
+          }}
+        >
+          <div>-</div>
+          <input
+            type="range"
+            min="-1"
+            max="1"
+            step="0.01"
+            value={grayscaleFactor}
+            onChange={(e) => setGrayscaleFactor(parseFloat(e.target.value))}
+            style={{ width: '100%', padding: '10px 0' }}
+          />
+          <div>+</div>
+        </div>
       </div>
     </div>
   )

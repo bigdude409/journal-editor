@@ -33,6 +33,8 @@ function ImageEditor({
   const [sliderValue, setSliderValue] = useState<number>(50)
   const [isDragging, setIsDragging] = useState<boolean>(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
+  const [isSliderVisible, setIsSliderVisible] = useState(true)
+  const [previousSliderValue, setPreviousSliderValue] = useState<number>(50)
 
   function handleMouseDown(e: React.MouseEvent<SVGRectElement>): void {
     e.preventDefault()
@@ -251,7 +253,20 @@ function ImageEditor({
       device.queue.writeBuffer(uniformBuffer, 0, new Float32Array([-1.0 * grayscaleFactor]))
       renderRef.current()
     }
-  }, [grayscaleFactor])
+  }, [grayscaleFactor, isSliderVisible])
+
+  const toggleSliderVisibility = (): void => {
+    setIsSliderVisible((prev) => {
+      if (prev) {
+        setPreviousSliderValue(sliderValue)
+
+        setSliderValue(0)
+      } else {
+        setSliderValue(previousSliderValue)
+      }
+      return !prev
+    })
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -264,34 +279,22 @@ function ImageEditor({
           cursor: isDragging ? 'grabbing' : 'default'
         }}
       >
-        <img
-          src={src}
-          alt="Bottom image"
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            display: 'block',
-            borderRadius: '5px',
-            clipPath: `inset(0 ${100 - sliderValue}% 0 0)`
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: '10px',
-            left: '10px',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            color: 'rgba(255, 255, 255, 0.5)',
-            padding: '2px 5px',
-            borderRadius: '5px',
-            fontSize: '12px'
-          }}
-        >
-          Before
-        </div>
+        {isSliderVisible && (
+          <img
+            src={src}
+            alt="Bottom image"
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              display: 'block',
+              borderRadius: '5px',
+              clipPath: `inset(0 ${100 - sliderValue}% 0 0)`
+            }}
+          />
+        )}
         <canvas
           ref={canvasRef}
           width={canvasWidth}
@@ -303,65 +306,84 @@ function ImageEditor({
             borderRadius: '5px'
           }}
         />
-        <div
-          style={{
-            position: 'absolute',
-            top: '10px',
-            right: '10px',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            color: 'rgba(255, 255, 255, 0.5)',
-            padding: '2px 5px',
-            borderRadius: '5px',
-            fontSize: '12px'
-          }}
-        >
-          After
-        </div>
-        <svg
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            zIndex: 2,
-            willChange: 'transform'
-          }}
-          viewBox={`0 0 ${normalizedWidth} ${normalizedHeight}`}
-        >
-          <defs>
-            <linearGradient id="handleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#4A90E2" />
-              <stop offset="100%" stopColor="#357ABD" />
-            </linearGradient>
-            <filter id="handleShadow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="2" dy="2" stdDeviation="2" floodOpacity="0.3" />
-            </filter>
-          </defs>
-          <line
-            x1={sliderValue * (typeof width === 'number' ? width / 100 : 1)}
-            y1="0"
-            x2={sliderValue * (typeof width === 'number' ? width / 100 : 1)}
-            y2={typeof height === 'number' ? height : '100%'}
-            stroke="white"
-            strokeWidth="2"
-            pointerEvents="none"
-          />
-          <rect
-            x={sliderValue * (typeof width === 'number' ? width / 100 : 1) - 5}
-            y={centerY}
-            width="10"
-            height={handleHeight}
-            rx="5"
-            fill="url(#handleGradient)"
-            filter="url(#handleShadow)"
-            onMouseDown={handleMouseDown}
-            style={{
-              cursor: isDragging ? 'grabbing' : 'grab',
-              pointerEvents: 'auto'
-            }}
-          />
-        </svg>
+        {isSliderVisible && (
+          <>
+            <div
+              style={{
+                position: 'absolute',
+                top: '10px',
+                left: '10px',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                color: 'rgba(255, 255, 255, 0.5)',
+                padding: '2px 5px',
+                borderRadius: '5px',
+                fontSize: '12px'
+              }}
+            >
+              Before
+            </div>
+
+            <div
+              style={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                color: 'rgba(255, 255, 255, 0.5)',
+                padding: '2px 5px',
+                borderRadius: '5px',
+                fontSize: '12px'
+              }}
+            >
+              After
+            </div>
+            <svg
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                zIndex: 2,
+                willChange: 'transform'
+              }}
+              viewBox={`0 0 ${normalizedWidth} ${normalizedHeight}`}
+            >
+              <defs>
+                <linearGradient id="handleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#4A90E2" />
+                  <stop offset="100%" stopColor="#357ABD" />
+                </linearGradient>
+                <filter id="handleShadow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feDropShadow dx="2" dy="2" stdDeviation="2" floodOpacity="0.3" />
+                </filter>
+              </defs>
+              <line
+                x1={sliderValue * (typeof width === 'number' ? width / 100 : 1)}
+                y1="0"
+                x2={sliderValue * (typeof width === 'number' ? width / 100 : 1)}
+                y2={typeof height === 'number' ? height : '100%'}
+                stroke="white"
+                strokeWidth="2"
+                pointerEvents="none"
+              />
+              <rect
+                x={sliderValue * (typeof width === 'number' ? width / 100 : 1) - 5}
+                y={centerY}
+                width="10"
+                height={handleHeight}
+                rx="5"
+                fill="url(#handleGradient)"
+                filter="url(#handleShadow)"
+                onMouseDown={handleMouseDown}
+                style={{
+                  cursor: isDragging ? 'grabbing' : 'grab',
+                  pointerEvents: 'auto'
+                }}
+              />
+            </svg>
+          </>
+        )}
       </div>
       <div
         style={{
@@ -430,6 +452,36 @@ function ImageEditor({
           </svg>
         </button>
       </div>
+      <button
+        onClick={toggleSliderVisibility}
+        style={{
+          position: 'absolute',
+          bottom: '10px',
+          left: '10px',
+          width: '30px',
+          height: '30px',
+          background: isSliderVisible ? 'rgba(0, 0, 0, 0.5)' : 'rgba(255, 255, 255, 0.5)',
+          border: 'none',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: '5px'
+        }}
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <line x1="12" y1="2" x2="12" y2="22" strokeDasharray="4 2" />
+        </svg>
+      </button>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-// import Versions from './components/Versions'
+import Versions from './components/Versions'
 import ImageEditor from './components/ImageEditor'
 // import ImageSlider from './components/ImageSlider'
 
@@ -54,7 +54,7 @@ function App(): JSX.Element {
         </span>
       </div>
 
-      {/* <Versions></Versions> */}
+      <Versions></Versions>
     </>
   )
 }

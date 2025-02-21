@@ -96,7 +96,10 @@ function ImageEditor({
       await new Promise((resolve) => (img.onload = resolve))
 
       // Calculate scale factor to fit image within canvas
-      const scaleFactor = Math.min(canvasWidth / img.width, canvasHeight / img.height)
+      const scaleFactor = Math.min(
+        Number(canvasWidth) / img.width,
+        Number(canvasHeight) / img.height
+      )
 
       // Clamp scaled dimensions to a minimum of 1
       const aWidth = Math.max(1, Math.floor(img.width * scaleFactor))
@@ -130,8 +133,8 @@ function ImageEditor({
       )
 
       // Calculate ratios for vertex positioning (NDC: -1 to 1)
-      const widthRatio = (scaledWidth / canvasWidth) * 1.0
-      const heightRatio = (scaledHeight / canvasHeight) * -1.0
+      const widthRatio = (scaledWidth / Number(canvasWidth)) * 1.0
+      const heightRatio = (scaledHeight / Number(canvasHeight)) * -1.0
 
       // Define shaders
       const shaderCode = `

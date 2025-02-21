@@ -25,6 +25,8 @@ function ImageEditor({
     uniformBuffer: null,
     bindGroup: null
   })
+  const [isGPUInitialized, setIsGPUInitialized] = useState(false)
+
   const renderRef = useRef<(() => void) | null>(null)
   const [saturationValue, setSaturationValue] = useState(initialSaturation)
   const [canvasWidth] = useState(width)
@@ -33,7 +35,7 @@ function ImageEditor({
   const [sliderValue, setSliderValue] = useState<number>(50)
   const [isDragging, setIsDragging] = useState<boolean>(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const [isSliderVisible, setIsSliderVisible] = useState(true)
+  const [isSliderVisible, setIsSliderVisible] = useState(false)
   const [previousSliderValue, setPreviousSliderValue] = useState<number>(50)
 
   function handleMouseDown(e: React.MouseEvent<SVGRectElement>): void {
@@ -241,6 +243,7 @@ function ImageEditor({
       }
 
       renderRef.current = render
+      setIsGPUInitialized(true)
       render()
     }
 
@@ -249,11 +252,11 @@ function ImageEditor({
 
   useEffect(() => {
     const { device, uniformBuffer } = webgpuRef.current
-    if (device && uniformBuffer && renderRef.current) {
+    if (device && uniformBuffer && renderRef.current && isGPUInitialized) {
       device.queue.writeBuffer(uniformBuffer, 0, new Float32Array([-1.0 * saturationValue]))
       renderRef.current()
     }
-  }, [saturationValue, isSliderVisible])
+  }, [saturationValue, isSliderVisible, isGPUInitialized])
 
   const toggleSliderVisibility = (): void => {
     setIsSliderVisible((prev) => {

@@ -1,5 +1,7 @@
 import Versions from './components/Versions'
 import ImageEditor from './components/ImageEditor'
+import ImageSlider from './components/ImageSlider'
+
 import { useState } from 'react'
 
 function App(): JSX.Element {
@@ -22,7 +24,12 @@ function App(): JSX.Element {
       </div>
 
       <div className="image-container">
-        <img src={selectedImage} style={{ borderRadius: '5px', width: '800px', height: '800px' }} />
+        <ImageSlider
+          topImageSrc={selectedImage}
+          bottomImageSrc={'/media/DSC_0375.JPG'}
+          width={800}
+          height={800}
+        />
         <ImageEditor initialFactor={0.0} src={selectedImage} width={800} height={800} />
       </div>
 

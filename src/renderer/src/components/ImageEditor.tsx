@@ -460,7 +460,7 @@ function ImageEditor({
           left: '10px',
           width: '30px',
           height: '30px',
-          background: isSliderVisible ? 'rgba(0, 0, 0, 0.5)' : 'rgba(255, 255, 255, 0.5)',
+          background: 'rgba(0, 0, 0, 0.5)',
           border: 'none',
           cursor: 'pointer',
           display: 'flex',
@@ -475,11 +475,14 @@ function ImageEditor({
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1"
+          strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
         >
-          <line x1="12" y1="2" x2="12" y2="22" strokeDasharray="4 2" />
+          <rect x="4" y="4" width="16" height="16" rx="2" />
+          {!isSliderVisible && (
+            <rect x="4" y="4" width="8" height="16" rx="1" fill="rgba(128, 128, 128, 0.5)" />
+          )}
         </svg>
       </button>
     </div>

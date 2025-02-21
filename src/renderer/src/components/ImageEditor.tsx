@@ -226,7 +226,8 @@ function ImageEditor({ initialFactor, src, width, height }: ImageEditorProps): J
             flexDirection: 'row',
             alignItems: 'center',
             gap: '10px',
-            width: '40%'
+            width: '40%',
+            marginTop: '15px'
           }}
         >
           <div style={{ fontSize: '20px', marginLeft: '20px', fontWeight: 'bold' }}>-</div>

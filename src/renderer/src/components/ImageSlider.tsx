@@ -60,7 +60,7 @@ function ImageSlider({
       <img
         src={bottomImageSrc}
         alt="Bottom image"
-        style={{ width: '100%', height: '100%', display: 'block' }}
+        style={{ width: '100%', height: '100%', display: 'block', borderRadius: '5px' }}
       />
       <img
         src={topImageSrc}
@@ -71,7 +71,8 @@ function ImageSlider({
           left: 0,
           width: '100%',
           height: '100%',
-          clipPath: `inset(0 ${100 - sliderValue}% 0 0)`
+          clipPath: `inset(0 ${100 - sliderValue}% 0 0)`,
+          borderRadius: '5px'
         }}
       />
       <svg

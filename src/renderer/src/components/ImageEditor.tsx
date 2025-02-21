@@ -3,14 +3,14 @@
 import { useRef, useEffect, useState } from 'react'
 
 interface ImageEditorProps {
-  initialFactor: number
+  initialSaturation: number
   src: string
   width?: string | number
   height?: string | number
 }
 
 function ImageEditor({
-  initialFactor,
+  initialSaturation,
   src,
   width = '100%',
   height = '100%'
@@ -26,7 +26,7 @@ function ImageEditor({
     bindGroup: null
   })
   const renderRef = useRef<(() => void) | null>(null)
-  const [grayscaleFactor, setGrayscaleFactor] = useState(initialFactor)
+  const [saturationValue, setSaturationValue] = useState(initialSaturation)
   const [canvasWidth] = useState(width)
   const [canvasHeight] = useState(height)
 
@@ -67,8 +67,8 @@ function ImageEditor({
     typeof height === 'number' ? height / 2 - handleHeight / 2 : `calc(50% - ${handleHeight / 2}px)`
 
   useEffect(() => {
-    setGrayscaleFactor(initialFactor)
-  }, [src, initialFactor])
+    setSaturationValue(initialSaturation)
+  }, [src, initialSaturation])
 
   useEffect(() => {
     async function initWebGPU(): Promise<void> {
@@ -141,7 +141,7 @@ function ImageEditor({
       // Define shaders
       const shaderCode = `
         struct Uniforms {
-          grayscaleFactor: f32,
+          saturationValue: f32,
           widthRatio: f32,
           heightRatio: f32,
         };
@@ -179,7 +179,7 @@ function ImageEditor({
         fn fragment_main(@location(0) texCoord: vec2<f32>) -> @location(0) vec4<f32> {
           let color = textureSample(myTexture, mySampler, texCoord);
           let gray = dot(color.rgb, vec3<f32>(0.299, 0.587, 0.114));
-          let finalColor = mix(color.rgb, vec3<f32>(gray), uniforms.grayscaleFactor);
+          let finalColor = mix(color.rgb, vec3<f32>(gray), uniforms.saturationValue);
           return vec4<f32>(finalColor, color.a);
         }
       `
@@ -202,7 +202,7 @@ function ImageEditor({
         usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
       })
       webgpuRef.current.uniformBuffer = uniformBuffer
-      const uniformData = new Float32Array([initialFactor, widthRatio, heightRatio])
+      const uniformData = new Float32Array([initialSaturation, widthRatio, heightRatio])
       device.queue.writeBuffer(uniformBuffer, 0, uniformData)
 
       const sampler = device.createSampler({
@@ -245,15 +245,15 @@ function ImageEditor({
     }
 
     initWebGPU()
-  }, [src, initialFactor, canvasWidth, canvasHeight])
+  }, [src, initialSaturation, canvasWidth, canvasHeight])
 
   useEffect(() => {
     const { device, uniformBuffer } = webgpuRef.current
     if (device && uniformBuffer && renderRef.current) {
-      device.queue.writeBuffer(uniformBuffer, 0, new Float32Array([-1.0 * grayscaleFactor]))
+      device.queue.writeBuffer(uniformBuffer, 0, new Float32Array([-1.0 * saturationValue]))
       renderRef.current()
     }
-  }, [grayscaleFactor, isSliderVisible])
+  }, [saturationValue, isSliderVisible])
 
   const toggleSliderVisibility = (): void => {
     setIsSliderVisible((prev) => {
@@ -420,14 +420,14 @@ function ImageEditor({
           min="-1"
           max="1"
           step="0.01"
-          value={grayscaleFactor}
-          onChange={(e) => setGrayscaleFactor(parseFloat(e.target.value))}
+          value={saturationValue}
+          onChange={(e) => setSaturationValue(parseFloat(e.target.value))}
           style={{ width: '100%', marginTop: '3px', padding: '0px 0px' }}
         />
         <div style={{ fontSize: '20px', fontWeight: 'bold' }}>+</div>
 
         <button
-          onClick={() => setGrayscaleFactor(0)}
+          onClick={() => setSaturationValue(0)}
           style={{
             border: 'none',
             background: 'none',

@@ -30,7 +30,7 @@ function App(): JSX.Element {
           width={800}
           height={800}
         /> */}
-        <ImageEditor initialFactor={0.0} src={selectedImage} width={800} height={800} />
+        <ImageEditor initialSaturation={0.0} src={selectedImage} width={800} height={800} />
       </div>
 
       <div style={{ textAlign: 'center', padding: '10px 0px' }}>

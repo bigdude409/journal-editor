@@ -1,6 +1,6 @@
-import Versions from './components/Versions'
+// import Versions from './components/Versions'
 import ImageEditor from './components/ImageEditor'
-import ImageSlider from './components/ImageSlider'
+// import ImageSlider from './components/ImageSlider'
 
 import { useState } from 'react'
 
@@ -20,16 +20,16 @@ function App(): JSX.Element {
   return (
     <>
       <div className="text">
-        <span className="ts">Saturation Adjustment (WebGPU)</span>
+        <span className="">Saturation Adjustment (WebGPU)</span>
       </div>
 
       <div className="image-container">
-        <ImageSlider
+        {/* <ImageSlider
           topImageSrc={selectedImage}
           bottomImageSrc={'/media/DSC_0374-grayscale.jpg'}
           width={800}
           height={800}
-        />
+        /> */}
         <ImageEditor initialFactor={0.0} src={selectedImage} width={800} height={800} />
       </div>
 
@@ -54,7 +54,7 @@ function App(): JSX.Element {
         </span>
       </div>
 
-      <Versions></Versions>
+      {/* <Versions></Versions> */}
     </>
   )
 }

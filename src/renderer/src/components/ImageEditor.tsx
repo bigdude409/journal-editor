@@ -261,18 +261,12 @@ function ImageEditor({
           position: 'relative',
           width: normalizedWidth,
           height: normalizedHeight,
-          cursor: isDragging ? 'grabbing' : 'default' // Container cursor still toggles
+          cursor: isDragging ? 'grabbing' : 'default'
         }}
       >
         <img
           src={src}
           alt="Bottom image"
-          style={{ width: '100%', height: '100%', display: 'block', borderRadius: '5px' }}
-        />
-        <canvas
-          ref={canvasRef}
-          width={canvasWidth}
-          height={canvasHeight}
           style={{
             position: 'absolute',
             top: 0,
@@ -284,6 +278,45 @@ function ImageEditor({
             clipPath: `inset(0 ${100 - sliderValue}% 0 0)`
           }}
         />
+        <div
+          style={{
+            position: 'absolute',
+            top: '10px',
+            left: '10px',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            color: 'rgba(255, 255, 255, 0.5)',
+            padding: '2px 5px',
+            borderRadius: '5px',
+            fontSize: '12px'
+          }}
+        >
+          Before
+        </div>
+        <canvas
+          ref={canvasRef}
+          width={canvasWidth}
+          height={canvasHeight}
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'block',
+            borderRadius: '5px'
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            color: 'rgba(255, 255, 255, 0.5)',
+            padding: '2px 5px',
+            borderRadius: '5px',
+            fontSize: '12px'
+          }}
+        >
+          After
+        </div>
         <svg
           style={{
             position: 'absolute',
@@ -324,7 +357,7 @@ function ImageEditor({
             filter="url(#handleShadow)"
             onMouseDown={handleMouseDown}
             style={{
-              cursor: isDragging ? 'grabbing' : 'grab', // Handle cursor toggles
+              cursor: isDragging ? 'grabbing' : 'grab',
               pointerEvents: 'auto'
             }}
           />

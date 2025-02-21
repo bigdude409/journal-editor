@@ -14,10 +14,12 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   height = 'auto'
 }) => {
   const [sliderValue, setSliderValue] = useState<number>(50)
+  const [isDragging, setIsDragging] = useState<boolean>(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
 
-  const handleMouseDown = (e: React.MouseEvent<SVGCircleElement>): void => {
+  const handleMouseDown = (e: React.MouseEvent<SVGRectElement>): void => {
     e.preventDefault()
+    setIsDragging(true)
 
     const onMouseMove = (moveEvent: MouseEvent): void => {
       if (!containerRef.current) return
@@ -29,6 +31,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
     }
 
     const onMouseUp = (): void => {
+      setIsDragging(false)
       document.removeEventListener('mousemove', onMouseMove)
       document.removeEventListener('mouseup', onMouseUp)
     }
@@ -40,13 +43,18 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   const normalizedWidth = typeof width === 'number' ? `${width}px` : width
   const normalizedHeight = typeof height === 'number' ? `${height}px` : height
 
+  const handleHeight = 20
+  const centerY =
+    typeof height === 'number' ? height / 2 - handleHeight / 2 : `calc(50% - ${handleHeight / 2}px)`
+
   return (
     <div
       ref={containerRef}
       style={{
         position: 'relative',
         width: normalizedWidth,
-        height: normalizedHeight
+        height: normalizedHeight,
+        cursor: isDragging ? 'grabbing' : 'default' // Container cursor still toggles
       }}
     >
       <img
@@ -76,26 +84,39 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
           zIndex: 2,
           willChange: 'transform'
         }}
-        viewBox={`0 0 ${normalizedWidth} ${normalizedHeight}`} // Dynamic viewBox matching container size
+        viewBox={`0 0 ${normalizedWidth} ${normalizedHeight}`}
       >
-        {/* Vertical line */}
+        <defs>
+          <linearGradient id="handleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#4A90E2" />
+            <stop offset="100%" stopColor="#357ABD" />
+          </linearGradient>
+          <filter id="handleShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="2" dy="2" stdDeviation="2" floodOpacity="0.3" />
+          </filter>
+        </defs>
         <line
           x1={sliderValue * (typeof width === 'number' ? width / 100 : 1)}
           y1="0"
           x2={sliderValue * (typeof width === 'number' ? width / 100 : 1)}
           y2={typeof height === 'number' ? height : '100%'}
           stroke="white"
-          strokeWidth="2" // Fixed pixel width
+          strokeWidth="2"
           pointerEvents="none"
         />
-        {/* Slider handle (blue circle) */}
-        <circle
-          cx={sliderValue * (typeof width === 'number' ? width / 100 : 1)}
-          cy={typeof height === 'number' ? height - 10 : 'calc(100% - 10)'}
-          r="5" // Fixed radius in pixels
-          fill="blue"
+        <rect
+          x={sliderValue * (typeof width === 'number' ? width / 100 : 1) - 5}
+          y={centerY}
+          width="10"
+          height={handleHeight}
+          rx="5"
+          fill="url(#handleGradient)"
+          filter="url(#handleShadow)"
           onMouseDown={handleMouseDown}
-          style={{ cursor: 'pointer', pointerEvents: 'auto' }}
+          style={{
+            cursor: isDragging ? 'grabbing' : 'grab', // Handle cursor toggles
+            pointerEvents: 'auto'
+          }}
         />
       </svg>
     </div>

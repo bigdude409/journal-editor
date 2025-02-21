@@ -7,21 +7,21 @@ interface ImageSliderProps {
   height?: string | number
 }
 
-const ImageSlider: React.FC<ImageSliderProps> = ({
+function ImageSlider({
   topImageSrc,
   bottomImageSrc,
   width = '100%',
   height = 'auto'
-}) => {
+}: ImageSliderProps): JSX.Element {
   const [sliderValue, setSliderValue] = useState<number>(50)
   const [isDragging, setIsDragging] = useState<boolean>(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
 
-  const handleMouseDown = (e: React.MouseEvent<SVGRectElement>): void => {
+  function handleMouseDown(e: React.MouseEvent<SVGRectElement>): void {
     e.preventDefault()
     setIsDragging(true)
 
-    const onMouseMove = (moveEvent: MouseEvent): void => {
+    function onMouseMove(moveEvent: MouseEvent): void {
       if (!containerRef.current) return
       const rect = containerRef.current.getBoundingClientRect()
       const x = moveEvent.clientX - rect.left
@@ -30,7 +30,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
       setSliderValue(clampedValue)
     }
 
-    const onMouseUp = (): void => {
+    function onMouseUp(): void {
       setIsDragging(false)
       document.removeEventListener('mousemove', onMouseMove)
       document.removeEventListener('mouseup', onMouseUp)

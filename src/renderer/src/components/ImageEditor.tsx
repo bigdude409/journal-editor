@@ -271,6 +271,27 @@ function ImageEditor({
     })
   }
 
+  // Early return if no src is provided
+  if (!src) {
+    return (
+      <div
+        style={{
+          width: normalizedWidth,
+          height: normalizedHeight,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#2c2c2c',
+          borderRadius: '5px',
+          color: '#fff',
+          fontSize: '16px'
+        }}
+      >
+        Select an image file...
+      </div>
+    )
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <div

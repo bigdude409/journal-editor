@@ -5,7 +5,7 @@ import ImageEditor from './components/ImageEditor'
 import { useState } from 'react'
 
 function App(): JSX.Element {
-  const [selectedImage, setSelectedImage] = useState<string>('/media/DSC_0374.JPG')
+  const [selectedImage, setSelectedImage] = useState<string>('')
 
   const handleFileSelect = async (): Promise<void> => {
     const filePath = await window.electron.ipcRenderer.invoke(

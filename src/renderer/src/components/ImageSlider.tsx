@@ -16,10 +16,10 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   const [sliderValue, setSliderValue] = useState<number>(50)
   const containerRef = useRef<HTMLDivElement | null>(null)
 
-  const handleMouseDown = (e: React.MouseEvent<SVGCircleElement>) => {
+  const handleMouseDown = (e: React.MouseEvent<SVGCircleElement>): void => {
     e.preventDefault()
 
-    const onMouseMove = (moveEvent: MouseEvent) => {
+    const onMouseMove = (moveEvent: MouseEvent): void => {
       if (!containerRef.current) return
       const rect = containerRef.current.getBoundingClientRect()
       const x = moveEvent.clientX - rect.left
@@ -28,7 +28,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
       setSliderValue(clampedValue)
     }
 
-    const onMouseUp = () => {
+    const onMouseUp = (): void => {
       document.removeEventListener('mousemove', onMouseMove)
       document.removeEventListener('mouseup', onMouseUp)
     }
@@ -66,40 +66,36 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
           clipPath: `inset(0 ${100 - sliderValue}% 0 0)`
         }}
       />
-      {/* Vertical line */}
-      <div
-        style={{
-          position: 'absolute',
-          left: `${sliderValue}%`,
-          top: 0,
-          height: '100%',
-          width: '2px',
-          backgroundColor: 'white',
-          pointerEvents: 'none',
-          transform: 'translateX(-50%)', // Center the line on the position
-          zIndex: 1 // Ensure it’s above images but below slider
-        }}
-      />
-      {/* SVG slider */}
       <svg
         style={{
           position: 'absolute',
-          bottom: 0,
+          top: 0,
           left: 0,
           width: '100%',
-          height: '20px',
-          zIndex: 2 // Ensure slider is above the line
+          height: '100%',
+          zIndex: 2,
+          willChange: 'transform'
         }}
-        viewBox="0 0 100 20"
+        viewBox={`0 0 ${normalizedWidth} ${normalizedHeight}`} // Dynamic viewBox matching container size
       >
-        <line x1="0" y1="10" x2="100" y2="10" stroke="black" strokeWidth="1" />
+        {/* Vertical line */}
+        <line
+          x1={sliderValue * (typeof width === 'number' ? width / 100 : 1)}
+          y1="0"
+          x2={sliderValue * (typeof width === 'number' ? width / 100 : 1)}
+          y2={typeof height === 'number' ? height : '100%'}
+          stroke="white"
+          strokeWidth="2" // Fixed pixel width
+          pointerEvents="none"
+        />
+        {/* Slider handle (blue circle) */}
         <circle
-          cx={sliderValue} // Matches the percentage value directly
-          cy="10"
-          r="5"
+          cx={sliderValue * (typeof width === 'number' ? width / 100 : 1)}
+          cy={typeof height === 'number' ? height - 10 : 'calc(100% - 10)'}
+          r="5" // Fixed radius in pixels
           fill="blue"
           onMouseDown={handleMouseDown}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', pointerEvents: 'auto' }}
         />
       </svg>
     </div>

@@ -26,7 +26,7 @@ function App(): JSX.Element {
       <div className="image-container">
         <ImageSlider
           topImageSrc={selectedImage}
-          bottomImageSrc={'/media/DSC_0375.JPG'}
+          bottomImageSrc={'/media/DSC_0374-grayscale.jpg'}
           width={800}
           height={800}
         />

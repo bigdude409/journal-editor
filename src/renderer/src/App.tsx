@@ -1,6 +1,4 @@
-import Versions from './components/Versions'
 import ImageEditor from './components/ImageEditor'
-// import ImageSlider from './components/ImageSlider'
 
 import { useState } from 'react'
 
@@ -24,12 +22,6 @@ function App(): JSX.Element {
       </div>
 
       <div className="image-container">
-        {/* <ImageSlider
-          topImageSrc={selectedImage}
-          bottomImageSrc={'/media/DSC_0374-grayscale.jpg'}
-          width={800}
-          height={800}
-        /> */}
         <ImageEditor initialSaturation={0.0} src={selectedImage} width={800} height={800} />
       </div>
 
@@ -53,8 +45,6 @@ function App(): JSX.Element {
           {selectedImage}
         </span>
       </div>
-
-      <Versions></Versions>
     </>
   )
 }

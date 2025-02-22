@@ -140,63 +140,25 @@ function ImageEditor({
       const widthRatio = (scaledWidth / Number(canvasWidth)) * 1.0
       const heightRatio = (scaledHeight / Number(canvasHeight)) * -1.0
 
-      // Define shaders
-      const shaderCode = `
-        struct Uniforms {
-          saturationValue: f32,
-          widthRatio: f32,
-          heightRatio: f32,
-        };
+      // Load shader code
+      const vertexShaderResponse = await fetch('/src/shaders/vertex.wgsl');
+      const fragmentShaderResponse = await fetch('/src/shaders/fragment.wgsl');
+      const vertexShaderCode = await vertexShaderResponse.text();
+      const fragmentShaderCode = await fragmentShaderResponse.text();
 
-        struct VertexOutput {
-          @builtin(position) position: vec4<f32>,
-          @location(0) texCoord: vec2<f32>,
-        };
+      const vertexShaderModule = device.createShaderModule({ code: vertexShaderCode });
+      const fragmentShaderModule = device.createShaderModule({ code: fragmentShaderCode });
 
-        @group(0) @binding(0) var myTexture: texture_2d<f32>;
-        @group(0) @binding(1) var mySampler: sampler;
-        @group(0) @binding(2) var<uniform> uniforms: Uniforms;
-
-        @vertex
-        fn vertex_main(@builtin(vertex_index) vertexIndex: u32) -> VertexOutput {
-          let positions = array<vec2<f32>, 4>(
-            vec2<f32>(uniforms.widthRatio, uniforms.heightRatio),
-            vec2<f32>(uniforms.widthRatio, -uniforms.heightRatio),
-            vec2<f32>(-uniforms.widthRatio, uniforms.heightRatio),
-            vec2<f32>(-uniforms.widthRatio, -uniforms.heightRatio)
-          );
-          let texCoords = array<vec2<f32>, 4>(
-            vec2<f32>(0.0, 1.0),
-            vec2<f32>(1.0, 1.0),
-            vec2<f32>(0.0, 0.0),
-            vec2<f32>(1.0, 0.0)
-          );
-          var output: VertexOutput;
-          output.position = vec4<f32>(positions[vertexIndex], 0.0, 1.0);
-          output.texCoord = texCoords[vertexIndex];
-          return output;
-        }
-
-        @fragment
-        fn fragment_main(@location(0) texCoord: vec2<f32>) -> @location(0) vec4<f32> {
-          let color = textureSample(myTexture, mySampler, texCoord);
-          let gray = dot(color.rgb, vec3<f32>(0.299, 0.587, 0.114));
-          let finalColor = mix(color.rgb, vec3<f32>(gray), uniforms.saturationValue);
-          return vec4<f32>(finalColor, color.a);
-        }
-      `
-
-      const shaderModule = device.createShaderModule({ code: shaderCode })
       const pipeline = device.createRenderPipeline({
         layout: 'auto',
-        vertex: { module: shaderModule, entryPoint: 'vertex_main' },
+        vertex: { module: vertexShaderModule, entryPoint: 'vertex_main' },
         fragment: {
-          module: shaderModule,
+          module: fragmentShaderModule,
           entryPoint: 'fragment_main',
           targets: [{ format: 'bgra8unorm' }]
         },
         primitive: { topology: 'triangle-strip' }
-      })
+      });
 
       // Create uniform buffer
       const uniformBuffer = device.createBuffer({

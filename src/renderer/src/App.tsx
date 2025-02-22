@@ -17,7 +17,7 @@ function App(): JSX.Element {
 
   return (
     <>
-      <div className="text">
+      <div className="">
         <span className="">Saturation Adjustment (WebGPU)</span>
       </div>
 

@@ -8,7 +8,7 @@ interface WebGPUContext {
 export async function initWebGPU(
   canvas: HTMLCanvasElement,
   src: string,
-  initialSaturation: number,
+  saturation: number,
   canvasWidth: number | string,
   canvasHeight: number | string
 ): Promise<WebGPUContext> {
@@ -92,7 +92,7 @@ export async function initWebGPU(
     usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
   })
 
-  const uniformData = new Float32Array([initialSaturation, widthRatio, heightRatio])
+  const uniformData = new Float32Array([saturation, widthRatio, heightRatio])
   device.queue.writeBuffer(uniformBuffer, 0, uniformData)
 
   const sampler = device.createSampler({

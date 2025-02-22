@@ -4,18 +4,12 @@ import { useRef, useEffect, useState } from 'react'
 import { initWebGPU } from '../utils/webGPURenderer'
 
 interface ImageEditorProps {
-  initialSaturation: number
   src: string
   width?: string | number
   height?: string | number
 }
 
-function ImageEditor({
-  initialSaturation,
-  src,
-  width = '100%',
-  height = '100%'
-}: ImageEditorProps): JSX.Element {
+function ImageEditor({ src, width = '100%', height = '100%' }: ImageEditorProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const webgpuRef = useRef<{
     device: GPUDevice | null
@@ -29,7 +23,7 @@ function ImageEditor({
   const [isGPUInitialized, setIsGPUInitialized] = useState(false)
 
   const renderRef = useRef<(() => void) | null>(null)
-  const [saturationValue, setSaturationValue] = useState(initialSaturation)
+  const [saturationValue, setSaturationValue] = useState(0.0)
   const [canvasWidth] = useState(width)
   const [canvasHeight] = useState(height)
 
@@ -70,15 +64,11 @@ function ImageEditor({
     typeof height === 'number' ? height / 2 - handleHeight / 2 : `calc(50% - ${handleHeight / 2}px)`
 
   useEffect(() => {
-    setSaturationValue(initialSaturation)
-  }, [src, initialSaturation])
-
-  useEffect(() => {
     async function setupWebGPU(): Promise<void> {
       const canvas = canvasRef.current
       if (!canvas) return
 
-      const context = await initWebGPU(canvas, src, initialSaturation, canvasWidth, canvasHeight)
+      const context = await initWebGPU(canvas, src, 0.0, canvasWidth, canvasHeight)
       webgpuRef.current = context
       renderRef.current = context.render
       setIsGPUInitialized(true)
@@ -88,7 +78,7 @@ function ImageEditor({
     }
 
     setupWebGPU()
-  }, [src, initialSaturation, canvasWidth, canvasHeight])
+  }, [src, canvasWidth, canvasHeight])
 
   useEffect(() => {
     const { device, uniformBuffer } = webgpuRef.current

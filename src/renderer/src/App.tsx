@@ -2,6 +2,14 @@ import ImageEditor from './components/ImageEditor'
 
 import { useState } from 'react'
 
+declare global {
+  interface Window {
+    api: {
+      toggleKiosk: (value: boolean) => Promise<void>
+    }
+  }
+}
+
 function App(): JSX.Element {
   const [selectedImage, setSelectedImage] = useState<string>('')
   // Kiosk mode state

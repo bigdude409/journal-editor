@@ -1,8 +1,10 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
-const api = {}
+const api = {
+  toggleKiosk: (enable: boolean): Promise<void> => ipcRenderer.invoke('toggle-kiosk', enable)
+}
 
 // SECURITY NOTE: DON"T DO THIS IN PRODUCTION.  EXPOSE ONLY THE NEEDED APIs
 

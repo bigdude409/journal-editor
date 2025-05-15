@@ -38,18 +38,22 @@
 
 * Upload to Photo Journal website.
 * Post to social media.
+* Realtime Collaboration
+* Apply presets from Lightroom (convert to our preset model first)
 
 ## Tech
 
 * React
 * Electron
 * Tailwind CSS
-* Webpack
+* Vite
 * TypeScript
 * WebGPU for editing photos.
 * TensorFlow.js for ML.
 * OpenAI Moderation API for content filtering.
 * OpenAI API for other ML operations.
+
+
 
 ## Backend
 

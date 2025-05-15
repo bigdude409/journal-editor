@@ -2,8 +2,18 @@ import ImageEditor from './components/ImageEditor'
 
 import { useState } from 'react'
 
+declare global {
+  interface Window {
+    api: {
+      toggleKiosk: (value: boolean) => Promise<void>
+    }
+  }
+}
+
 function App(): JSX.Element {
   const [selectedImage, setSelectedImage] = useState<string>('')
+  // Kiosk mode state
+  const [isKiosk, setIsKiosk] = useState<boolean>(false)
 
   const handleFileSelect = async (): Promise<void> => {
     const filePath = await window.electron.ipcRenderer.invoke(
@@ -13,6 +23,13 @@ function App(): JSX.Element {
     if (filePath) {
       setSelectedImage(`/media/${filePath.split('/').pop()}`)
     }
+  }
+
+  // Toggle kiosk mode via API
+  const handleToggleKiosk = async (): Promise<void> => {
+    const newVal = !isKiosk
+    await window.api.toggleKiosk(newVal)
+    setIsKiosk(newVal)
   }
 
   return (
@@ -44,6 +61,22 @@ function App(): JSX.Element {
         <span className="title" style={{ marginLeft: '10px' }}>
           {selectedImage}
         </span>
+        {/* Kiosk mode toggle */}
+        <label
+          onClick={handleToggleKiosk}
+          style={{
+            display: 'inline-block',
+            marginLeft: '20px',
+            padding: '8px 16px',
+            backgroundColor: '#007acc',
+            border: 'none',
+            borderRadius: '20px',
+            color: '#fff',
+            cursor: 'pointer'
+          }}
+        >
+          {isKiosk ? 'Exit Kiosk Mode' : 'Enter Kiosk Mode'}
+        </label>
       </div>
     </>
   )

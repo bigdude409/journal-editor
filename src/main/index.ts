@@ -1,13 +1,17 @@
 import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join } from 'path'
+// import { Worker } from 'worker_threads'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
 // Menu.setApplicationMenu(null)
 
+// add mainWindow reference for kiosk toggle
+let mainWindow: BrowserWindow
+
 function createWindow(): void {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 900,
     height: 1000,
     show: false,
@@ -49,6 +53,13 @@ ipcMain.handle('select-file', async (_event, defaultPath) => {
     return result.filePaths[0]
   }
   return null
+})
+
+// Add kiosk toggle IPC handler
+ipcMain.handle('toggle-kiosk', (_event, enable: boolean) => {
+  if (mainWindow) {
+    mainWindow.setKiosk(enable)
+  }
 })
 
 // This method will be called when Electron has finished
